@@ -6,13 +6,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Batsu Options</title>
-		<link href="jquery-ui/jquery-ui.min.css" rel="stylesheet">
-		<link href="options.css" rel="stylesheet">
-		<link href="icons/leechblock16.ico" rel="icon" type="image/x-icon">
-		<link href="icons/leechblock16.ico" rel="shortcut icon" type="image/x-icon">
-		<link id="themeLink" rel="stylesheet">
+        <script> src="/options.js" </script>
 	</head>
-
     <body>
         <fieldset>
             <legend>What to Block</legend>
@@ -22,30 +17,9 @@
             <hr>
             <p>
                 <label>Enter the domain names of the sites to block (one item per line):</label><br>
-                <div><textarea id="sites1" cols="50" rows="30" spellcheck="false" placeholder="somesite.com"></textarea></div>
+                <div><textarea id="sites" type="text" cols="50" rows="30" spellcheck="false" placeholder="somesite.com"></textarea></div>
+                <input type="button" onclick="saveTextArea()" value="Save Options"/>
             </p>
         </fieldset>
-
-        <p style="text-align: center;">
-            <button id="saveOptions" type="button">Save Options</button>
-            <button id="saveOptionsClose" type="button">Save Options &amp; Close</button>
-        </p>
-
-        <script src="jquery-ui/external/jquery/jquery.js"></script>
-		<script src="jquery-ui/jquery-ui.min.js"></script>
-        <script src="common.js"></script>
-		<script src="options.js"></script>
-
     </body>
-
-
-
-
-
-
-
-
-
-    </body>
-
 </html>

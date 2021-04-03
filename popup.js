@@ -23,26 +23,24 @@ function initializePage() {
 // Open options page
 //
 function openOptions() {
-	browser.runtime.openOptionsPage();
-	window.close();
+	openExtensionPage("/options.html");
 }
-
 // Open timer page
 //
 function openTimer() {
-	openExtensionPage("timer.html");
+	openExtensionPage("/timer.html");
 }
 
 // Open permaban page
 //
 function openPermaban() {
-	openExtensionPage("permaban.html");
+	openExtensionPage("/permaban.html");
 }
 
 // Open batsu page
 //
 function openBatsu() {
-	openExtensionPage("batsu.html");
+	openExtensionPage("/batsu.html");
 }
 
 // Open extension page (either create new tab or activate existing tab)
