@@ -1,0 +1,31 @@
+{
+
+  "manifest_version": 2,
+  "name": "Batsu",
+  "version": "1.0",
+
+  "browser_action": {
+        "browser_style": false,
+        "default_icon": {
+            "48": "icons/border-48.png",
+            "48": "icons/border-48.png"
+        },
+        "default_popup": "popup.html",
+        "default_title": "LeechBlock"
+    },
+
+  "description": "Adds a red border to all webpages matching youtube.com.",
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.google.com/*"],
+      "matches": ["*://*.mozilla.org/*"],
+      "js": ["borderify.js"]
+    }
+  ]
+
+}
