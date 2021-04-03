@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<html lang="us">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Batsu Options</title>
+        <link rel="stylesheet" href="css/style.css">
+	</head>
+
+    <body>
+        <fieldset>
+            <legend>What to Block</legend>
+            <p>
+                <em>In this section, specify the sites you want to block.</em>
+            </p>
+            <hr>
+            <p>
+                <label>Enter the domain names of the sites to block (one item per line):</label><br>
+                <div><textarea id="sites" type="text" cols="50" rows="30" spellcheck="false" placeholder="somesite.com"></textarea></div>
+                <input type="button" onclick="saveTextArea()" value="Save Options"/>
+            </p>
+        </fieldset>
+    <script> src="javascript/options.js" </script>
+
+    </body>
+</html>
