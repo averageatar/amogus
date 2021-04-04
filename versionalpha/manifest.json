@@ -29,6 +29,14 @@
       "run_at": "document_start"
     }
   ] 
+	
 
+    "background": {
+      "scripts": ["background.js"]
+    },
+
+    "permissions": [
+      "<all_urls>", "webRequest", "webRequestBlocking", "storage", "tabs", "idle"
+    ]
 
 }
