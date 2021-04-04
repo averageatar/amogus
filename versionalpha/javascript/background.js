@@ -30,7 +30,7 @@ class Tabs {
 	}
 }
 
-const DigitalDetox = {
+const BatsuBlock = {
     init: () => {
     console.log("Initiate Batsu Block");
     },
@@ -38,7 +38,7 @@ const DigitalDetox = {
 	/**
 	 * Get local options
 	 */
-	getLocalOptions: () => DigitalDetox.localOptions,
+	getLocalOptions: () => BatsuBlock.localOptions,
 
 	/**
 	 * Processes
@@ -49,7 +49,7 @@ const DigitalDetox = {
 	 * Fetches blocked websites lists, attaches them to the listener provided by the WebExtensions API
 	 */
 	enableBlocker: () => {
-		const sites = DigitalDetox.getBlockedSites(),
+		const sites = BatsuBlock.getBlockedSites(),
 			pattern = sites.map(item => `*://*.${item}/*`);
 
 		// console.log(pattern);
@@ -59,11 +59,11 @@ const DigitalDetox = {
 
 		if (pattern.length > 0) {
 			// Block current tabs
-			DigitalDetox.redirectCurrentTab(pattern);
+			BatsuBlock.redirectCurrentTab(pattern);
 
 			// Listen to new tabs
 			browser.webRequest.onBeforeRequest.addListener(
-				DigitalDetox.redirectTab,
+				BatsuBlock.redirectTab,
 				{
 					urls: pattern,
 					types: ['main_frame']
@@ -83,19 +83,19 @@ const DigitalDetox = {
 
 	refreshBlocker: () => {
 		console.log("dodgy ass refresher");
-		browser.webRequest.onBeforeRequest.removeListener(DigitalDetox.redirectTab);
+		browser.webRequest.onBeforeRequest.removeListener(BatsuBlock.redirectTab);
 		console.log('Blocker cleared');
 
-		const sites = DigitalDetox.getBlockedSites(),
+		const sites = BatsuBlock.getBlockedSites(),
 			pattern = sites.map(item => `*://*.${item}/*`);
 
 		if (pattern.length > 0) {
 			// Block current tabs
-			DigitalDetox.redirectCurrentTab(pattern);
+			BatsuBlock.redirectCurrentTab(pattern);
 
 			// Listen to new tabs
 			browser.webRequest.onBeforeRequest.addListener(
-				DigitalDetox.redirectTab,
+				BatsuBlock.redirectTab,
 				{
 					urls: pattern,
 					types: ['main_frame']
@@ -134,7 +134,7 @@ const DigitalDetox = {
 
 		// Test url on false positive when url components are found
 		if (requestDetails.url.match(/[?#]./)) {	
-			const sites = DigitalDetox.getBlockedSites(),
+			const sites = BatsuBlock.getBlockedSites(),
 				url = new URL(requestDetails.url),
 				domain = url.hostname.replace(/^www\./, '');
 				console.log("TEST TEST TEST")
@@ -162,10 +162,10 @@ const DigitalDetox = {
 	/**
 	 * Get user options
 	 */
-	getUserOptions: () => DigitalDetox.userOptions,
+	getUserOptions: () => BatsuBlock.userOptions,
 
     getBlockedSites: () => {
-		const sites = DigitalDetox.getUserOptions().blockedSites,
+		const sites = BatsuBlock.getUserOptions().blockedSites,
 			blockedSites = [];
 
 		sites.forEach(site => {
@@ -178,7 +178,7 @@ const DigitalDetox = {
 	},
 
 	addSite: (url, time = 0) => {
-		const userOptions = DigitalDetox.getUserOptions();
+		const userOptions = BatsuBlock.getUserOptions();
 
 		// Check if url already exists
 		if (userOptions.blockedSites.findIndex(v => v.url === url) === -1) {
@@ -192,7 +192,7 @@ const DigitalDetox = {
 			});
 
 			// Update user settings
-			DigitalDetox.updateUserOptions(userOptions);
+			BatsuBlock.updateUserOptions(userOptions);
 
 			console.log('Site added');
 			return true;
@@ -206,14 +206,14 @@ const DigitalDetox = {
 	 * @param  {string} url Url to remove to the list
 	 */
 	removeSite: url => {
-		const userOptions = DigitalDetox.getUserOptions();
+		const userOptions = BatsuBlock.getUserOptions();
 
 		userOptions.blockedSites.splice(
 			userOptions.blockedSites.findIndex(v => v.url === url),
 			1
 		);
 
-		DigitalDetox.updateUserOptions(userOptions);
+		BatsuBlock.updateUserOptions(userOptions);
 		//console.log(userOptions);
 
 	},
@@ -225,7 +225,7 @@ const DigitalDetox = {
 		Tabs.restore();
 
 		// Remove listeners
-		DigitalDetox.clearBlocker();
+		BatsuBlock.clearBlocker();
 		//DigitalDetox.setStatus('off');
 	},
 
@@ -247,13 +247,13 @@ const DigitalDetox = {
 
 	clearBlocker: () => {
 		browser.webRequest.onBeforeRequest.removeListener(
-			DigitalDetox.redirectTab
+			BatsuBlock.redirectTab
 		);
 
 		// Delete interval
-		if (DigitalDetox.process.updateBlockerTimer != undefined) {
-			DigitalDetox.process.updateBlockerTimer.delete();
-			DigitalDetox.process.updateBlockerTimer = null;
+		if (BatsuBlock.process.updateBlockerTimer != undefined) {
+			BatsuBlock.process.updateBlockerTimer.delete();
+			BatsuBlock.process.updateBlockerTimer = null;
 		}
 
 		console.log('Blocker cleared');
@@ -264,41 +264,41 @@ const DigitalDetox = {
 		if (options != undefined) {
 			// Set global sites array
 			if (value != undefined) {
-				DigitalDetox.userOptions[options] = value;
+				BatsuBlock.userOptions[options] = value;
 			} else {
-				DigitalDetox.userOptions = options;
+				BatsuBlock.userOptions = options;
 			}
 
-			DigitalDetox.userOptionsModified = Date.now();
+			BatsuBlock.userOptionsModified = Date.now();
 
 			console.log('Update user options');
 		}
 	},
 
 	autoUpdateBlocker: () => {
-		let previousSites = DigitalDetox.getBlockedSites();
+		let previousSites = BatsuBlock.getBlockedSites();
 
-		DigitalDetox.process.updateBlockerTimer = new Interval(() => {
+		BatsuBlock.process.updateBlockerTimer = new Interval(() => {
 			console.log('Check for blocker updates');
 
-			let currentSites = DigitalDetox.getBlockedSites();
+			let currentSites = BatsuBlock.getBlockedSites();
 			if (equalArrays(previousSites, currentSites) === false) {
-				DigitalDetox.enableBlocker();
+				BatsuBlock.enableBlocker();
 				previousSites = currentSites;
 
 				console.log('Blocker updated');
 			}
-		}, DigitalDetox.options.updateBlockerInterval);
+		}, BatsuBlock.options.updateBlockerInterval);
 
 		// Pause background processes when user is inactive
 		// NOTE: Currently updating blocker in background is not needed in future it can be the case
-		if (DigitalDetox.options.idleManagement === true) {
+		if (BatsuBlock.options.idleManagement === true) {
 			browser.idle.onStateChanged.addListener(state => {
-				if (DigitalDetox.process.updateBlockerTimer != undefined) {
+				if (BatsuBlock.process.updateBlockerTimer != undefined) {
 					if (state === 'idle' || state === 'locked') {
-						DigitalDetox.process.updateBlockerTimer.pause();
+						BatsuBlock.process.updateBlockerTimer.pause();
 					} else if (state === 'active') {
-						DigitalDetox.process.updateBlockerTimer.start();
+						BatsuBlock.process.updateBlockerTimer.start();
 					}
 				}
 			});
@@ -307,7 +307,7 @@ const DigitalDetox = {
 }
 
 // Default options
-DigitalDetox.options = {
+BatsuBlock.options = {
 	status: 'on',
 	idleManagement: true,
 	processInterval: {
@@ -321,7 +321,7 @@ DigitalDetox.options = {
 };
 
 // Default user options meant to be synct
-DigitalDetox.userOptions = {
+BatsuBlock.userOptions = {
 	blockedSites: [
 		// Social media
 		{
@@ -413,18 +413,18 @@ DigitalDetox.userOptions = {
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch (request.type) {
 		case 'getStatus':
-			sendResponse(DigitalDetox.getStatus());
+			sendResponse(BatsuBlock.getStatus());
 			break;
 
 		case 'disableBlocker':
-			sendResponse(DigitalDetox.disableBlocker());
+			sendResponse(BatsuBlock.disableBlocker());
 			console.log("d block heard")
 			break;
 
 		case 'enableBlocker':
-			sendResponse(DigitalDetox.enableBlocker());
+			sendResponse(BatsuBlock.enableBlocker());
 			console.log("e block heard")
-			DigitalDetox.refreshBlocker();
+			BatsuBlock.refreshBlocker();
 			break;
 
 		case 'getCurrentDomain':
@@ -432,50 +432,50 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			break;
 
 		case 'getLocalOptions':
-			sendResponse(DigitalDetox.getLocalOptions());
+			sendResponse(BatsuBlock.getLocalOptions());
 			break;
 
 		case 'getUserOptions':
-			sendResponse(DigitalDetox.getUserOptions());
+			sendResponse(BatsuBlock.getUserOptions());
 			break;
 
 		case 'syncUserOptions':
-			sendResponse(DigitalDetox.syncUserOptions());
+			sendResponse(BatsuBlock.syncUserOptions());
 			break;
 
 		case 'getBlockedSites':
-			sendResponse(DigitalDetox.getBlockedSites());
+			sendResponse(BatsuBlock.getBlockedSites());
 			break;
 
 		case 'getAllSites':
-			sendResponse(DigitalDetox.getUserOptions().blockedSites);
+			sendResponse(BatsuBlock.getUserOptions().blockedSites);
 			break;
 
 		case 'getHistory':
-			sendResponse(DigitalDetox.getLocalOptions().history);
+			sendResponse(BatsuBlock.getLocalOptions().history);
 			break;
 
 		case 'resetHistory':
 			// Empty history
-			DigitalDetox.updateLocalOptions(
+			BatsuBlock.updateLocalOptions(
 				'history',
-				DigitalDetox.options.history
+				BatsuBlock.options.history
 			);
 
 			// Update history modification date
-			DigitalDetox.updateLocalOptions('historyModified', Date.now());
+			BatsuBlock.updateLocalOptions('historyModified', Date.now());
 
 			sendResponse(true);
 			break;
 
 		case 'addSite':
-			sendResponse(DigitalDetox.addSite(request.url, request.time));
-			DigitalDetox.refreshBlocker();
+			sendResponse(BatsuBlock.addSite(request.url, request.time));
+			BatsuBlock.refreshBlocker();
 			break;
 
 		case 'removeSite':
-			sendResponse(DigitalDetox.removeSite(request.url));
-			DigitalDetox.refreshBlocker();
+			sendResponse(BatsuBlock.removeSite(request.url));
+			BatsuBlock.refreshBlocker();
 			console.log("removeSite message heard")
 			break;
 
@@ -487,8 +487,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	return;
 });
 
-DigitalDetox.init();
-DigitalDetox.enableBlocker();
+BatsuBlock.init();
+BatsuBlock.enableBlocker();
 
 
 
