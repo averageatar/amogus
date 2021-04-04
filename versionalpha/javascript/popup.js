@@ -66,16 +66,16 @@ function openExtensionPage(url) {
 }
 
 function switchState() {
-	if (document.getElementById("imgClickAndChange").src == "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg") {
+	if (document.getElementById("imgClickAndChange").src == "https://i.imgur.com/Ypv2gME.png") {
 		// TURN ON
-		document.getElementById("imgClickAndChange").src = "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png";
+		document.getElementById("imgClickAndChange").src = "https://i.imgur.com/Jnhd88p.png";
 		// tells background.js to enable blocker
 		browser.runtime.sendMessage({
 			type: 'enableBlocker'
 		});
 	} else {
 		// TURN OFF
-		document.getElementById("imgClickAndChange").src = "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
+		document.getElementById("imgClickAndChange").src = "https://i.imgur.com/Ypv2gME.png";
 		// tells background.js to disable blocker
 		browser.runtime.sendMessage({
 			type: 'disableBlocker'
