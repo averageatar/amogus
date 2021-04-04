@@ -26,6 +26,7 @@ h1 {
 h2 {
     color: rgb(185, 177, 177);
     font-size: 16px;
+    padding: 4px 0;
 }
 
 a {
@@ -44,6 +45,7 @@ a {
 
 .warning-link-wrapper {
     margin-top: 8px;
+    color: rgb(175, 32, 32);
 }
 .unblock-link-wrapper {
     margin-top: 8px;
