@@ -18,6 +18,24 @@
 			<button id="options" type="button">Options</button>
 			<button id="timer" type="button">Timer</button>
 		</div>
+		
+		<div class="switch" style="background:rgb(249,249,250);float:right;margin-right:25%;">
+			<button id="light" width="70" height="35" style="background:rgb(249,249,250);display:inline-block">
+			<img src="icons/off.png" width="70" height="35" style="float:none;margin-right:0cm;margin-bottom:0%;" id="imgClickAndChange" onclick="changeImage();"/>
+			</button>
+		</div>
+
+		<script language="javascript">
+			
+			function changeImage() {
+			if (document.getElementById("imgClickAndChange").src == "icons/off.png") {
+                		document.getElementById("imgClickAndChange").src = "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png";
+                		} else {
+                    			document.getElementById("imgClickAndChange").src = "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
+                		}
+            		}
+			Console.log(document.getElementById("imgClickAndChange").innerHTML)
+		</script>
 	</body>
 	<script src="/javascript/popup.js"></script>
 </html>
