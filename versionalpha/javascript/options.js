@@ -117,5 +117,6 @@ function deleteSite(event) {
 			type: 'removeSite',
 			url: url
 		});
+        console.log("function deleteSite ran")
 	}
 }

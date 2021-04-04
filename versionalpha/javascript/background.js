@@ -1,14 +1,23 @@
-localStorage.setItem("bulge","69");
+'use strict';
 
 const DigitalDetox = {
     init: () => {
     console.log("Initiate Batsu Block");
     },
 
+	/**
+	 * Get local options
+	 */
+	getLocalOptions: () => DigitalDetox.localOptions,
+
+	/**
+	 * Processes
+	 */
+	process: {},
+
     /**
 	 * Fetches blocked websites lists, attaches them to the listener provided by the WebExtensions API
 	 */
-    getUserOptions: () => DigitalDetox.userOptions,
 	enableBlocker: () => {
 		const sites = DigitalDetox.getBlockedSites(),
 			pattern = sites.map(item => `*://*.${item}/*`);
@@ -42,6 +51,30 @@ const DigitalDetox = {
 		console.log('Blocker enabled');
 	},
 
+	refreshBlocker: () => {
+		console.log("dodgy ass refresher");
+		browser.webRequest.onBeforeRequest.removeListener(DigitalDetox.redirectTab);
+		console.log('Blocker cleared');
+
+		const sites = DigitalDetox.getBlockedSites(),
+			pattern = sites.map(item => `*://*.${item}/*`);
+
+		if (pattern.length > 0) {
+			// Block current tabs
+			DigitalDetox.redirectCurrentTab(pattern);
+
+			// Listen to new tabs
+			browser.webRequest.onBeforeRequest.addListener(
+				DigitalDetox.redirectTab,
+				{
+					urls: pattern,
+					types: ['main_frame']
+				},
+				['blocking']
+			);
+		}
+
+	},
 	redirectCurrentTab: urls => {
 		browser.tabs
 			.query({ 		//Gets all tabs that have the specified properties, or all tabs if no properties are specified.
@@ -74,14 +107,19 @@ const DigitalDetox = {
 			const sites = DigitalDetox.getBlockedSites(),
 				url = new URL(requestDetails.url),
 				domain = url.hostname.replace(/^www\./, '');
+				console.log("TEST TEST TEST")
+				console.log(sites);
 
 			// Catch url that are false positive for example when a url has a url as component
 			if (!sites.includes(domain)) {
 				match = false;
+				console.log("not a match")
+
 			}
 		}
 
 		if (match === true) { //Redirect newly opened tabs to redirect.html if they match a banned url	
+			console.log("match found")
 			browser.tabs.update(requestDetails.tabId, {
 				url: browser.runtime.getURL(
 					'/redirect.html?from=' +
@@ -90,6 +128,11 @@ const DigitalDetox = {
 			});
 		}
 	},
+
+	/**
+	 * Get user options
+	 */
+	getUserOptions: () => DigitalDetox.userOptions,
 
     getBlockedSites: () => {
 		const sites = DigitalDetox.getUserOptions().blockedSites,
@@ -141,6 +184,49 @@ const DigitalDetox = {
 		);
 
 		DigitalDetox.updateUserOptions(userOptions);
+		//console.log(userOptions);
+
+	},
+
+	disableBlocker: () => {
+		console.log('Disable blocker');
+
+		// Restore blocked tabs
+		Tabs.restore();
+
+		// Remove listeners
+		DigitalDetox.clearBlocker();
+		//DigitalDetox.setStatus('off');
+	},
+
+	restoreTabs: () => {
+		browser.tabs
+			.query({
+				url: browser.runtime.getURL('*')
+			})
+			.then(tabs => {
+				// Loop matched tabs
+				for (let tab of tabs) {
+					// Reload tabs
+					browser.tabs.reload(tab.id);
+				}
+			});
+
+		console.log('Tabs restored');
+	},
+
+	clearBlocker: () => {
+		browser.webRequest.onBeforeRequest.removeListener(
+			DigitalDetox.redirectTab
+		);
+
+		// Delete interval
+		if (DigitalDetox.process.updateBlockerTimer != undefined) {
+			DigitalDetox.process.updateBlockerTimer.delete();
+			DigitalDetox.process.updateBlockerTimer = null;
+		}
+
+		console.log('Blocker cleared');
 	},
 
 	updateUserOptions: (options, value = null) => {
@@ -158,7 +244,51 @@ const DigitalDetox = {
 			console.log('Update user options');
 		}
 	},
+
+	autoUpdateBlocker: () => {
+		let previousSites = DigitalDetox.getBlockedSites();
+
+		DigitalDetox.process.updateBlockerTimer = new Interval(() => {
+			console.log('Check for blocker updates');
+
+			let currentSites = DigitalDetox.getBlockedSites();
+			if (equalArrays(previousSites, currentSites) === false) {
+				DigitalDetox.enableBlocker();
+				previousSites = currentSites;
+
+				console.log('Blocker updated');
+			}
+		}, DigitalDetox.options.updateBlockerInterval);
+
+		// Pause background processes when user is inactive
+		// NOTE: Currently updating blocker in background is not needed in future it can be the case
+		if (DigitalDetox.options.idleManagement === true) {
+			browser.idle.onStateChanged.addListener(state => {
+				if (DigitalDetox.process.updateBlockerTimer != undefined) {
+					if (state === 'idle' || state === 'locked') {
+						DigitalDetox.process.updateBlockerTimer.pause();
+					} else if (state === 'active') {
+						DigitalDetox.process.updateBlockerTimer.start();
+					}
+				}
+			});
+		} 
+	},
 }
+
+// Default options
+DigitalDetox.options = {
+	status: 'on',
+	idleManagement: true,
+	processInterval: {
+		syncLocalOptions: 1000,
+		syncUserOptions: 30000,
+		statusInterval: 6000
+	},
+	updateBlockerInterval: 1000,
+	disableDuration: 5400000,
+	history: []
+};
 
 // Default user options meant to be synct
 DigitalDetox.userOptions = {
@@ -307,10 +437,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 		case 'addSite':
 			sendResponse(DigitalDetox.addSite(request.url, request.time));
+			DigitalDetox.refreshBlocker();
 			break;
 
 		case 'removeSite':
 			sendResponse(DigitalDetox.removeSite(request.url));
+			DigitalDetox.refreshBlocker();
+			console.log("removeSite message heard")
 			break;
 
 		default:
