@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<html lang="us">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Batsu</title>
+		<link href="/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="chrome://global/skin/in-content/common.css" type="text/css" media="all" />
+		<link href="/popup.css" rel="stylesheet">
+		<link id="themeLink" rel="stylesheet">
+	</head>
+
+	<body>
+		<p style="text-align:center">Batsu</p>
+		<div id="button-container" class="ui-widget">
+			<button id="options" type="button">Options</button>
+			<button id="timer" type="button">Timer</button>
+		</div>
+		
+		<div id="switch" class="switch" style="background:rgb(249,249,250);float:right;margin-right:25%;">
+			<button id="light" width="70" height="35" style="background:rgb(249,249,250);display:inline-block">
+			<img src="https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png" width="70" height="35" style="float:none;margin-right:0cm;margin-bottom:0%;" id="imgClickAndChange" onclick="changeImage();"/>
+			</button>
+		</div>
+
+		<!--<script language="javascript">
+			
+			function changeImage() {
+			if (document.getElementById("imgClickAndChange").src == "icons/off.png") {
+                		document.getElementById("imgClickAndChange").src = "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png";
+                		} else {
+                    			document.getElementById("imgClickAndChange").src = "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
+                		}
+            		}
+			console.log(document.getElementById("imgClickAndChange").src)
+		</script>-->
+	</body>
+	<script src="/javascript/popup.js"></script>
+</html>

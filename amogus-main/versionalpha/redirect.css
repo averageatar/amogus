@@ -1,0 +1,93 @@
+* {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+main {
+    box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.7);
+}
+
+section {
+    height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h1 {
+    color: rgb(226, 212, 212);
+    font-size: 64px;
+}
+
+h2 {
+    color: rgb(185, 177, 177);
+    font-size: 16px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(175, 32, 32);
+}
+
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 200px rgba(0,0,0,0.9) inset;
+}
+
+.warning-link-wrapper {
+    margin-top: 8px;
+}
+.unblock-link-wrapper {
+    margin-top: 8px;
+}
+
+/* .body-no-scroll {
+    height: 100%;
+    overflow-y: hidden;
+} */
+
+/* nav {
+    color: white;
+    width: 100%;
+    position: fixed;
+    height: 60px;
+}
+
+.nav-bar {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    padding: 0 2rem;
+}
+
+.nav-header {
+    all: unset;
+}
+
+.nav-links {
+    width: 250px;
+}
+
+.nav-links ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+} */
+
+
+
+
