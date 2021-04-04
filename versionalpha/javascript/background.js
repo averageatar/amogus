@@ -424,6 +424,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		case 'enableBlocker':
 			sendResponse(DigitalDetox.enableBlocker());
 			console.log("e block heard")
+			DigitalDetox.refreshBlocker();
 			break;
 
 		case 'getCurrentDomain':
