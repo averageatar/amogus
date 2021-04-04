@@ -55,7 +55,7 @@ const BatsuBlock = {
 		// console.log(pattern);
 
 		// Clear blocker incase when blocker is already running
-		//BatsuBlock.clearBlocker();
+		//DigitalDetox.clearBlocker();
 
 		if (pattern.length > 0) {
 			// Block current tabs
@@ -73,10 +73,10 @@ const BatsuBlock = {
 		}
 
 		// Enable blocker auto update
-		//BatsuBlock.autoUpdateBlocker();
+		//DigitalDetox.autoUpdateBlocker();
 
 		// Change status to on
-		//BatsuBlock.setStatus('on');
+		//DigitalDetox.setStatus('on');
 
 		console.log('Blocker enabled');
 	},
@@ -226,7 +226,7 @@ const BatsuBlock = {
 
 		// Remove listeners
 		BatsuBlock.clearBlocker();
-		//BatsuBlock.setStatus('off');
+		//DigitalDetox.setStatus('off');
 	},
 
 	restoreTabs: () => {
