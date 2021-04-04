@@ -1,4 +1,34 @@
-'use strict';
+//import Domain from './modules/domain';
+//import Tabs from './modules/tabs';
+
+class Tabs {
+	static async getCurrent() {
+		const currentTab = await browser.tabs.query({
+			active: true,
+			currentWindow: true
+		});
+		return currentTab[0];
+	}
+
+	static async getBlocked() {
+		return await browser.tabs.query({
+			url: browser.runtime.getURL('*')
+		});
+	}
+
+	static async restore() {
+		// Get current blocked tabs
+		const blockedTabs = await this.getBlocked();
+
+		// Loop blocked tabs and reload
+		for (let tab of blockedTabs) {
+			browser.tabs.reload(tab.id);
+		}
+
+		console.log('Tabs restored');
+		return;
+	}
+}
 
 const DigitalDetox = {
     init: () => {
@@ -388,10 +418,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 		case 'disableBlocker':
 			sendResponse(DigitalDetox.disableBlocker());
+			console.log("d block heard")
 			break;
 
 		case 'enableBlocker':
 			sendResponse(DigitalDetox.enableBlocker());
+			console.log("e block heard")
 			break;
 
 		case 'getCurrentDomain':
