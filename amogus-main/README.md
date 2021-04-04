@@ -1,2 +1,0 @@
-# batsu 
-# amogus
